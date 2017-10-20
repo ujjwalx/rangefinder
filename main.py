@@ -138,8 +138,18 @@ def estimate_bearing(img, landmark_patch, range_measurement):
         global_heading_angle = landmark_angle + diff_angle
 
     #bearing_measurement = np.rad2deg(global_heading_angle)
-    bearing_measurement = global_heading_angle
+    bearing_measurement = np.deg2rad(np.mod(global_heading_angle, 360))
+
     return bearing_measurement
+
+
+def write_file(filename, detections):
+    file = open(filename, 'w')
+    for measurement in detections:
+        (filename, _, detected_signature, range_measurement,
+         bearing_measurement) = measurement
+        file.write(str(filename) + '||' + str(detected_signature) + '||' + str(range_measurement) + '||'
+                   + str(bearing_measurement) + '\n')
 
 
 startTime = time.time()
@@ -202,22 +212,24 @@ for file in fileList:
                     LOWER_GREEN[2] <= avg_hsv[2] <= UPPER_GREEN[2]):
 
                 if (orientation == 1):
-
-                    landmark_location = tuple([x, y - h, w, 2 * h, 5])
+                    detected_signature = 5
+                    landmark_location = tuple(
+                        [x, y - h, w, 2 * h, detected_signature])
                     range_measurement = estimate_range(landmark_location)
                     bearing_measurement = estimate_bearing(img, landmark_location,
                                                            range_measurement)
                     detections.append(
-                        tuple([file, "Pink_Green", range_measurement, bearing_measurement]))
+                        tuple([file, "Pink_Green", detected_signature, range_measurement, bearing_measurement]))
 
                 else:
-
-                    landmark_location = tuple([x, y, w, 2 * h, 2])
+                    detected_signature = 2
+                    landmark_location = tuple(
+                        [x, y, w, 2 * h, detected_signature])
                     range_measurement = estimate_range(landmark_location)
                     bearing_measurement = estimate_bearing(img, landmark_location,
                                                            range_measurement)
                     detections.append(
-                        tuple([file, "Green_Pink", range_measurement, bearing_measurement]))
+                        tuple([file, "Green_Pink", detected_signature, range_measurement, bearing_measurement]))
 
                 show_data(range_measurement, bearing_measurement)
 
@@ -226,21 +238,23 @@ for file in fileList:
                     LOWER_BLUE[2] <= avg_hsv[2] <= UPPER_BLUE[2]):
 
                 if (orientation == 1):
-
-                    landmark_location = tuple([x, y - h, w, 2 * h, 6])
+                    detected_signature = 6
+                    landmark_location = tuple(
+                        [x, y - h, w, 2 * h, detected_signature])
                     range_measurement = estimate_range(landmark_location)
                     bearing_measurement = estimate_bearing(img, landmark_location,
                                                            range_measurement)
                     detections.append(
-                        tuple([file, "Pink_Blue", range_measurement, bearing_measurement]))
+                        tuple([file, "Pink_Blue", detected_signature, range_measurement, bearing_measurement]))
                 else:
-
-                    landmark_location = tuple([x, y, w, 2 * h, 1])
+                    detected_signature = 1
+                    landmark_location = tuple(
+                        [x, y, w, 2 * h, detected_signature])
                     range_measurement = estimate_range(landmark_location)
                     bearing_measurement = estimate_bearing(img, landmark_location,
                                                            range_measurement)
                     detections.append(
-                        tuple([file, "Blue_Pink", range_measurement, bearing_measurement]))
+                        tuple([file, "Blue_Pink", detected_signature, range_measurement, bearing_measurement]))
 
                 show_data(range_measurement, bearing_measurement)
 
@@ -249,24 +263,27 @@ for file in fileList:
                     LOWER_YELLOW[2] <= avg_hsv[2] <= UPPER_YELLOW[2]):
 
                 if (orientation == 1):
-
-                    landmark_location = tuple([x, y - h, w, 2 * h, 4])
+                    detected_signature = 4
+                    landmark_location = tuple(
+                        [x, y - h, w, 2 * h, detected_signature])
                     range_measurement = estimate_range(landmark_location)
                     bearing_measurement = estimate_bearing(img, landmark_location,
                                                            range_measurement)
                     detections.append(
-                        tuple([file, "Pink_Yellow", range_measurement, bearing_measurement]))
+                        tuple([file, "Pink_Yellow", detected_signature, range_measurement, bearing_measurement]))
 
                 else:
-
-                    landmark_location = tuple([x, y, w, 2 * h, 3])
+                    detected_signature = 3
+                    landmark_location = tuple(
+                        [x, y, w, 2 * h, detected_signature])
                     range_measurement = estimate_range(landmark_location)
                     bearing_measurement = estimate_bearing(img, landmark_location,
                                                            range_measurement)
                     detections.append(
-                        tuple([file, "Yellow_Pink", range_measurement, bearing_measurement]))
+                        tuple([file, "Yellow_Pink", detected_signature, range_measurement, bearing_measurement]))
 
                 show_data(range_measurement, bearing_measurement)
 
 
+write_file('./measurement.dat', detections)
 print("--This run took %0.2f seconds--" % (time.time() - startTime))
