@@ -126,12 +126,9 @@ def estimate_bearing(img, landmark_patch, range_measurement):
     xcenterL = (xL + (xL + wL)) / 2.0
     ycenterL = (yL + (yL + hL)) / 2.0
 
-    diff_angle = np.arctan(abs(xcenterI - xcenterL) / range_measurement)
+    diff_angle = np.arctan(
+        (abs(xcenterI - xcenterL) * 2 * np.tan(fov / 2)) / wI)
 
-    d = abs(xcenterI - xcenterL)
-
-    # compute bearing from pixel difference, corrected for head pitch
-    diff_angle = (float(d) / float(w)) * fov
     landmark_angle = get_landmark_angle_degrees(signature)
 
     if (xcenterI - xcenterL >= 0):
@@ -180,7 +177,6 @@ for file in fileList:
             # cv2.drawContours(mask,[cnt],0,255,-1)
             x, y, w, h = cv2.boundingRect(cnt)
             pinkLocations.append(tuple([x, y, w, h]))
-
             # Enable for Debugging
             # cv2.rectangle(img,(x,y),(x+w,y+h),(0,255,0),2)
 
