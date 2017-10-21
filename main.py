@@ -120,7 +120,7 @@ def estimate_bearing(img, landmark_patch, range_measurement):
     ycenterI = int(hI / 2)
 
     # Unpack landmark location values
-    (xL, yL, wL, hL, signature) = landmark_location
+    (xL, yL, wL, hL, signature) = landmark_patch
 
     # find center of the observation, find distance from image center
     xcenterL = (xL + (xL + wL)) / 2.0
@@ -154,12 +154,12 @@ def write_file(filename, detections):
 
 startTime = time.time()
 detections = []
-fileList = sorted(os.listdir('calibration'))
+fileList = sorted(os.listdir('data'))
 
 for file in fileList:
 
     # This loop loads image to be tested.
-    img = cv2.imread('calibration/' + file)
+    img = cv2.imread('data/' + file)
     img = remove_non_informative_regions(img)
     img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     #img = histogramEqualize(img)
