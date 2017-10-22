@@ -63,7 +63,7 @@ def estimate_range(landmark_location):
     # Unpack landmark location values
     (_, _, width, height, _) = landmark_location
 
-    # set nominal values at 1 meter distance TODO: Check if this works correctly
+    # set nominal values at 1 meter distance
     w_nominal = 47.16
     h_nominal = 107.32
 
@@ -74,37 +74,19 @@ def estimate_range(landmark_location):
 
     return range_estimate
 
-
-def get_landmark_angle_radians(signature):
-    if signature == 1:
-        angle = 5.4979
-    if signature == 2:
-        angle = 0
-    if signature == 3:
-        angle = 0.785398
-    if signature == 4:
-        angle = 2.35619
-    if signature == 5:
-        angle = 3.14159
-    if signature == 6:
-        angle = 3.92699
-
-    return angle
-
-
 def get_landmark_angle_degrees(signature):
     if signature == 1:
-        angle = 315
+        angle = 303.7
     if signature == 2:
         angle = 0
     if signature == 3:
-        angle = 45
+        angle = 56.3
     if signature == 4:
-        angle = 135
+        angle = 123.7
     if signature == 5:
         angle = 180
     if signature == 6:
-        angle = 225
+        angle = 236.6
 
     return angle
 
@@ -138,7 +120,7 @@ def estimate_bearing(img, landmark_patch, range_measurement):
         global_heading_angle = landmark_angle + diff_angle
 
     #bearing_measurement = np.rad2deg(global_heading_angle)
-    bearing_measurement = np.deg2rad(np.mod(global_heading_angle, 360))
+    bearing_measurement = np.mod(global_heading_angle, 360)
 
     return bearing_measurement
 
